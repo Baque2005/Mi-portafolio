@@ -6,12 +6,54 @@ import { FaReact, FaNodeJs, FaJava, FaDatabase, FaGithub, FaFacebook, FaWhatsapp
 import { SiExpress, SiPostgresql, SiCplusplus } from "react-icons/si";
 import logo from "../logo.svg";
 import "../index.css"; // Asegura que tailwind y fuentes personalizadas estén aplicadas
-import favicon from "../../public/favicon.ico";
 
 export default function LandingPage() {
   const [darkMode] = useState(true); // Elimino el toggle, fijo en dark
   const topRef = useRef(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
+
+  // Para el subrayado animado del menú
+  const menuItems = [
+    { href: "#about", label: "Sobre mí" },
+    { href: "#projects", label: "Proyectos" },
+    { href: "#services", label: "Servicios" },
+    { href: "#contact", label: "Contacto" }
+  ];
+  const [hoveredIdx, setHoveredIdx] = useState(null);
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [underlineStyle, setUnderlineStyle] = useState({ left: 0, width: 0 });
+  const menuRefs = useRef([]);
+
+  // Refs para las secciones
+  const sectionRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
+
+  // Intersection Observer para detectar la sección visible
+  useEffect(() => {
+    const handleScroll = () => {
+      const offsets = sectionRefs.map(ref => {
+        if (!ref.current) return Infinity;
+        const rect = ref.current.getBoundingClientRect();
+        return Math.abs(rect.top - 80); // 80px de margen para el header
+      });
+      const minIdx = offsets.indexOf(Math.min(...offsets));
+      setActiveIdx(minIdx);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Actualiza la posición del subrayado
+  useEffect(() => {
+    const idx = hoveredIdx !== null ? hoveredIdx : activeIdx;
+    const el = menuRefs.current[idx];
+    if (el) {
+      setUnderlineStyle({
+        left: el.offsetLeft,
+        width: el.offsetWidth
+      });
+    }
+  }, [hoveredIdx, activeIdx]);
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", darkMode);
@@ -27,6 +69,7 @@ export default function LandingPage() {
   // Redes y contacto
   const github = "https://github.com/Baque2005";
   const facebook = "https://www.facebook.com/profile.php?id=61576900643053";
+  const facebookPersonal = "https://www.facebook.com/stevenbaque.sj.7?locale=es_LA";
   const whatsapp = "https://wa.me/593999562442";
   const cv = process.env.PUBLIC_URL + "/services/Cv.Ronald Steven.pdf";
 
@@ -139,38 +182,47 @@ export default function LandingPage() {
         <div className="container mx-auto flex flex-col md:flex-row items-center justify-between py-4 px-4 md:px-8 gap-2 md:gap-0">
           {/* Logo y nombre */}
           <div className="flex items-center gap-3 w-full md:w-auto justify-center md:justify-start">
-            <img src={favicon} alt="Logo" className="h-10 w-10 rounded-full shadow-md border-2 border-cyan-400 bg-white p-1" />
+            <img src="/favicon.ico" alt="Logo" className="h-10 w-10 rounded-full shadow-md border-2 border-cyan-400 bg-white p-1" />
             <span className="text-2xl md:text-3xl font-extrabold tracking-tight text-gray-100">Steven Baque</span>
           </div>
-          {/* Menú */}
-          <nav className="w-full md:w-auto mt-2 md:mt-0 flex justify-center md:justify-end">
-            <ul className="flex flex-wrap gap-4 md:gap-8 text-base md:text-lg">
-              {[
-                { href: "#about", label: "Sobre mí" },
-                { href: "#projects", label: "Proyectos" },
-                { href: "#services", label: "Servicios" },
-                { href: "#contact", label: "Contacto" }
-              ].map((item, i) => (
-                <motion.li
+          {/* Menú con subrayado animado */}
+          <nav className="w-full md:w-auto mt-2 md:mt-0 flex flex-col md:flex-row items-center md:justify-end relative">
+            <ul className="flex flex-wrap gap-4 md:gap-8 text-base md:text-lg relative">
+              {menuItems.map((item, i) => (
+                <li
                   key={item.href}
-                  initial={{ y: -30, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.2 + i * 0.1, duration: 0.5 }}
-                  whileHover={{ scale: 1.08 }}
+                  ref={el => menuRefs.current[i] = el}
+                  onMouseEnter={() => setHoveredIdx(i)}
+                  onMouseLeave={() => setHoveredIdx(null)}
+                  className="relative cursor-pointer"
                 >
-                  <a href={item.href} className="relative px-2 py-1 transition-colors duration-200 hover:text-[#6ee7b7]">
+                  <a
+                    href={item.href}
+                    className={
+                      `relative px-2 py-1 transition-colors duration-200 ` +
+                      (i === (hoveredIdx !== null ? hoveredIdx : activeIdx) ? "text-[#6ee7b7]" : "text-gray-100 hover:text-[#6ee7b7]")
+                    }
+                  >
                     <span className="relative z-10">{item.label}</span>
-                    <span className="absolute left-0 bottom-0 w-full h-0.5 bg-[#6ee7b7] rounded-full scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
                   </a>
-                </motion.li>
+                </li>
               ))}
+              {/* Subrayado animado */}
+              <span
+                className="absolute bottom-0 h-1 bg-[#6ee7b7] rounded-full transition-all duration-300"
+                style={{
+                  left: underlineStyle.left,
+                  width: underlineStyle.width,
+                  zIndex: 5
+                }}
+              />
             </ul>
           </nav>
         </div>
       </header>
 
       {/* Hero Section con imagen de fondo sutil y tu foto */}
-      <section className="flex-grow container mx-auto px-4 sm:px-6 flex flex-col md:flex-row justify-center items-center text-center md:text-left space-y-6 md:space-y-0 md:space-x-12 relative z-10 pt-10 pb-20">
+      <section ref={sectionRefs[0]} className="flex-grow container mx-auto px-4 sm:px-6 flex flex-col md:flex-row justify-center items-center text-center md:text-left space-y-6 md:space-y-0 md:space-x-12 relative z-10 pt-10 pb-20">
         <motion.img
           src={process.env.PUBLIC_URL + "/Foto.png"}
           alt="Steven Baque"
@@ -198,7 +250,7 @@ export default function LandingPage() {
           </motion.p>
           <div className="flex flex-wrap gap-4 justify-center md:justify-start mb-4">
             <a href={github} target="_blank" rel="noopener noreferrer" className="bg-[#23283a] hover:bg-[#6ee7b7] hover:text-[#23283a] text-white px-4 py-2 rounded-lg flex items-center gap-2 shadow transition"><FaGithub size={22}/>GitHub</a>
-            <a href={facebook} target="_blank" rel="noopener noreferrer" className="bg-[#23283a] hover:bg-blue-500 hover:text-white text-white px-4 py-2 rounded-lg flex items-center gap-2 shadow transition"><FaFacebook size={22}/>Facebook</a>
+            <a href={facebookPersonal} target="_blank" rel="noopener noreferrer" className="bg-[#23283a] hover:bg-blue-500 hover:text-white text-white px-4 py-2 rounded-lg flex items-center gap-2 shadow transition"><FaFacebook size={22}/>Facebook</a>
             <a href={whatsapp} target="_blank" rel="noopener noreferrer" className="bg-[#23283a] hover:bg-green-400 hover:text-[#23283a] text-white px-4 py-2 rounded-lg flex items-center gap-2 shadow transition"><FaWhatsapp size={22}/>WhatsApp</a>
             <a href={cv} download className="bg-[#23283a] hover:bg-[#818cf8] hover:text-[#23283a] text-white px-4 py-2 rounded-lg flex items-center gap-2 shadow transition"><FaCloud size={22}/>Descargar CV</a>
           </div>
@@ -206,7 +258,7 @@ export default function LandingPage() {
       </section>
 
       {/* Galería de imágenes de programación */}
-      <section className="container mx-auto px-6 py-12 max-w-3xl">
+      <section ref={sectionRefs[1]} className="container mx-auto px-6 py-12 max-w-3xl">
         <h3 className="text-3xl font-bold mb-8 text-[#6ee7b7] text-center">Mi trabajo y entorno</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {programmingImages.map((img, i) => (
@@ -230,7 +282,7 @@ export default function LandingPage() {
       </section>
 
       {/* Cinta de tecnologías/lenguajes (marquee infinita) */}
-      <section className="w-full py-8 bg-[#181c24] border-y border-cyan-900 overflow-hidden relative">
+      <section ref={sectionRefs[2]} className="w-full py-8 bg-[#181c24] border-y border-cyan-900 overflow-hidden relative">
         <div className="absolute left-0 top-0 w-full h-full pointer-events-none bg-gradient-to-r from-[#181c24] via-transparent to-[#181c24] z-10" />
         <div className="flex items-center gap-12 animate-marquee whitespace-nowrap text-4xl font-bold px-8" style={{ width: 'max-content' }}>
           {Array(3).fill(techs).flat().map((t, i) => (
@@ -252,7 +304,7 @@ export default function LandingPage() {
       </section>
 
       {/* About Section */}
-      <motion.section
+      <motion.section ref={sectionRefs[3]}
         id="about"
         className="bg-[#23283a] text-white py-20 relative z-10 shadow-inner"
         initial={{ opacity: 0, y: 60 }}
@@ -385,9 +437,10 @@ export default function LandingPage() {
         <p className="mb-6">¿Quieres trabajar conmigo, tienes una idea o necesitas ayuda en tu proyecto? ¡Hablemos!</p>
         <div className="flex flex-col items-center gap-4 mb-6">
           <a href="mailto:baqueperez89@gmail.com" className="text-lg font-semibold text-cyan-300 hover:underline">baqueperez89@gmail.com</a>
-          <div className="flex gap-4 justify-center">
+          <div className="flex gap-4 flex-wrap justify-center">
             <a href={github} target="_blank" rel="noopener noreferrer" className="bg-[#23283a] hover:bg-cyan-400 hover:text-[#23283a] text-white px-6 py-3 rounded-lg flex items-center gap-2 shadow transition text-lg"><FaGithub size={26}/>GitHub</a>
-            <a href={facebook} target="_blank" rel="noopener noreferrer" className="bg-[#23283a] hover:bg-blue-500 hover:text-white text-white px-6 py-3 rounded-lg flex items-center gap-2 shadow transition text-lg"><FaFacebook size={26}/>Facebook</a>
+            <a href={facebook} target="_blank" rel="noopener noreferrer" className="bg-[#23283a] hover:bg-blue-500 hover:text-white text-white px-6 py-3 rounded-lg flex items-center gap-2 shadow transition text-lg"><FaFacebook size={26}/>Facebook Empresa</a>
+            <a href={facebookPersonal} target="_blank" rel="noopener noreferrer" className="bg-[#23283a] hover:bg-blue-400 hover:text-white text-white px-6 py-3 rounded-lg flex items-center gap-2 shadow transition text-lg"><FaFacebook size={26}/>Facebook Personal</a>
             <a href={whatsapp} target="_blank" rel="noopener noreferrer" className="bg-[#23283a] hover:bg-green-400 hover:text-[#23283a] text-white px-6 py-3 rounded-lg flex items-center gap-2 shadow transition text-lg"><FaWhatsapp size={26}/>WhatsApp</a>
           </div>
         </div>
