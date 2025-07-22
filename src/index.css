@@ -6,16 +6,21 @@ body {
   @apply bg-gray-100 min-h-screen m-0 p-0;
 }
 
-.scrollbar-thin {
+html, body {
   scrollbar-width: thin;
+  scrollbar-color: #6ee7b7 #23283a;
 }
-.scrollbar-thumb-indigo-400::-webkit-scrollbar-thumb {
-  background-color: #818cf8; /* indigo-400 */
-  border-radius: 9999px;
+
+/* Webkit browsers */
+::-webkit-scrollbar {
+  width: 8px;
+  background: #23283a;
 }
-.scrollbar-track-indigo-100::-webkit-scrollbar-track {
-  background-color: #e0e7ff; /* indigo-100 */
+::-webkit-scrollbar-thumb {
+  background: #6ee7b7;
+  border-radius: 8px;
+  border: 2px solid #23283a;
 }
-body {
-  overflow-x: hidden;
+::-webkit-scrollbar-track {
+  background: #23283a;
 }
