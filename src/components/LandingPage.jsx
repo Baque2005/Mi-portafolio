@@ -6,6 +6,7 @@ import { FaReact, FaNodeJs, FaJava, FaDatabase, FaGithub, FaFacebook, FaWhatsapp
 import { SiExpress, SiPostgresql, SiCplusplus } from "react-icons/si";
 import logo from "../logo.svg";
 import "../index.css"; // Asegura que tailwind y fuentes personalizadas estén aplicadas
+import favicon from "../../public/favicon.ico";
 
 export default function LandingPage() {
   const [darkMode] = useState(true); // Elimino el toggle, fijo en dark
@@ -133,42 +134,43 @@ export default function LandingPage() {
         </button>
       )}
 
-      {/* Header con animación hover, colores sobrios */}
-      <header className="container mx-auto p-6 flex flex-col items-center relative z-10">
-        <motion.h1
-          className="text-3xl font-extrabold tracking-tight mb-2 cursor-pointer text-gray-100 hover:text-[#6ee7b7] transition-colors"
-          whileHover={{ scale: 1.06 }}
-          transition={{ type: "spring", stiffness: 300 }}
-        >
-          Steven Baque
-        </motion.h1>
-        <nav>
-          <ul className="flex space-x-8 text-lg justify-center">
-            {[
-              { href: "#about", label: "Sobre mí" },
-              { href: "#projects", label: "Proyectos" },
-              { href: "#services", label: "Servicios" },
-              { href: "#contact", label: "Contacto" }
-            ].map((item, i) => (
-              <motion.li
-                key={item.href}
-                initial={{ y: -30, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.2 + i * 0.1, duration: 0.5 }}
-                whileHover={{ scale: 1.08 }}
-              >
-                <a href={item.href} className="relative px-2 py-1 transition-colors duration-200 hover:text-[#6ee7b7]">
-                  <span className="relative z-10">{item.label}</span>
-                  <span className="absolute left-0 bottom-0 w-full h-0.5 bg-[#6ee7b7] rounded-full scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
-                </a>
-              </motion.li>
-            ))}
-          </ul>
-        </nav>
+      {/* Header mejorado y responsivo */}
+      <header className="w-full shadow-lg border-b-2 border-cyan-700 bg-gradient-to-r from-[#23283a] via-[#23283a]/90 to-[#23283a] sticky top-0 z-20">
+        <div className="container mx-auto flex flex-col md:flex-row items-center justify-between py-4 px-4 md:px-8 gap-2 md:gap-0">
+          {/* Logo y nombre */}
+          <div className="flex items-center gap-3 w-full md:w-auto justify-center md:justify-start">
+            <img src={favicon} alt="Logo" className="h-10 w-10 rounded-full shadow-md border-2 border-cyan-400 bg-white p-1" />
+            <span className="text-2xl md:text-3xl font-extrabold tracking-tight text-gray-100">Steven Baque</span>
+          </div>
+          {/* Menú */}
+          <nav className="w-full md:w-auto mt-2 md:mt-0 flex justify-center md:justify-end">
+            <ul className="flex flex-wrap gap-4 md:gap-8 text-base md:text-lg">
+              {[
+                { href: "#about", label: "Sobre mí" },
+                { href: "#projects", label: "Proyectos" },
+                { href: "#services", label: "Servicios" },
+                { href: "#contact", label: "Contacto" }
+              ].map((item, i) => (
+                <motion.li
+                  key={item.href}
+                  initial={{ y: -30, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.2 + i * 0.1, duration: 0.5 }}
+                  whileHover={{ scale: 1.08 }}
+                >
+                  <a href={item.href} className="relative px-2 py-1 transition-colors duration-200 hover:text-[#6ee7b7]">
+                    <span className="relative z-10">{item.label}</span>
+                    <span className="absolute left-0 bottom-0 w-full h-0.5 bg-[#6ee7b7] rounded-full scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                  </a>
+                </motion.li>
+              ))}
+            </ul>
+          </nav>
+        </div>
       </header>
 
       {/* Hero Section con imagen de fondo sutil y tu foto */}
-      <section className="flex-grow container mx-auto px-6 flex flex-col md:flex-row justify-center items-center text-center md:text-left space-y-6 md:space-y-0 md:space-x-12 relative z-10 pt-10 pb-20">
+      <section className="flex-grow container mx-auto px-4 sm:px-6 flex flex-col md:flex-row justify-center items-center text-center md:text-left space-y-6 md:space-y-0 md:space-x-12 relative z-10 pt-10 pb-20">
         <motion.img
           src={process.env.PUBLIC_URL + "/Foto.png"}
           alt="Steven Baque"
