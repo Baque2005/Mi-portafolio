@@ -227,11 +227,11 @@ export default function LandingPage() {
         `}</style>
       </section>
 
-      {/* Cinta de tecnologías/lenguajes */}
+      {/* Cinta de tecnologías/lenguajes (marquee infinita) */}
       <section className="w-full py-8 bg-[#181c24] border-y border-cyan-900 overflow-hidden relative">
         <div className="absolute left-0 top-0 w-full h-full pointer-events-none bg-gradient-to-r from-[#181c24] via-transparent to-[#181c24] z-10" />
-        <div className="flex items-center gap-12 animate-marquee whitespace-nowrap text-4xl font-bold px-8">
-          {Array(2).fill(techs).flat().map((t, i) => (
+        <div className="flex items-center gap-12 animate-marquee whitespace-nowrap text-4xl font-bold px-8" style={{ width: 'max-content' }}>
+          {Array(3).fill(techs).flat().map((t, i) => (
             <span key={i} className="flex flex-col items-center mx-6">
               <span className="drop-shadow-lg">{t.icon}</span>
               <span className="text-xs mt-1 font-semibold text-cyan-300">{t.name}</span>
@@ -241,7 +241,7 @@ export default function LandingPage() {
         <style>{`
           @keyframes marquee {
             0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+            100% { transform: translateX(-33.333%); }
           }
           .animate-marquee {
             animation: marquee 30s linear infinite;
