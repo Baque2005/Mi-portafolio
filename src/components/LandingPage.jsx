@@ -385,6 +385,33 @@ export default function LandingPage() {
             <h4 className="text-2xl font-semibold mb-2">Dashboard Administrativo</h4>
             <p>Dashboard moderno con React y Material UI para gestión de usuarios y estadísticas en tiempo real.</p>
           </motion.div>
+          {/* Proyecto 4: codigossyste.onrender.com */}
+<motion.div
+  className="bg-[#23283a] rounded-lg shadow-lg p-6 text-white hover:scale-105 transform transition cursor-pointer border-b-4 border-blue-400"
+  whileHover={{ scale: 1.07, boxShadow: "0 8px 32px 0 rgba(59,130,246,0.2)" }}
+  initial={{ opacity: 0, y: 40 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true, amount: 0.3 }}
+  transition={{ delay: 0.3, duration: 0.6 }}
+>
+  <FaCloud className="text-4xl text-blue-400 mb-2 animate-bounce" />
+  <h4 className="text-2xl font-semibold mb-2">SysteCode</h4>
+  <p className="mb-2">
+    Plataforma online donde los usuarios pueden subir y descargar archivos HTML dedicables con fines sentimentales o creativos.
+  </p>
+  <p className="text-sm text-cyan-300 font-medium mt-2">
+    🛠 Tecnologías: React · Node.js · Express · PostgreSQL · JWT · GitHub · Google Auth
+  </p>
+  <a
+    href="https://codigossyste.onrender.com"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="mt-4 inline-block text-blue-400 hover:underline"
+  >
+    Ir al sitio →
+  </a>
+</motion.div>
+
         </div>
       </motion.section>
 
