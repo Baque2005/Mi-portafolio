@@ -70,7 +70,7 @@ export default function LandingPage() {
   const github = "https://github.com/Baque2005";
   const facebook = "https://www.facebook.com/profile.php?id=61576900643053";
   const facebookPersonal = "https://www.facebook.com/stevenbaque.sj.7?locale=es_LA";
-  const whatsapp = "https://wa.me/593999562442";
+  const whatsapp = "https://wa.me/593986347561";
   const cv = process.env.PUBLIC_URL + "/services/Cv.Ronald Steven.pdf";
 
   // Tecnologías
