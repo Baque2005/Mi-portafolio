@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { motion } from "framer-motion";
 import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
-import { FaReact, FaNodeJs, FaJava, FaDatabase, FaGithub, FaFacebook, FaWhatsapp, FaCloud, FaGitAlt, FaLock, FaHtml5, FaCss3Alt, FaJs, FaCogs, FaHeart } from "react-icons/fa";
+import { FaReact, FaNodeJs, FaJava, FaGithub, FaFacebook, FaWhatsapp, FaCloud, FaGitAlt, FaLock, FaHtml5, FaCss3Alt, FaJs, FaCogs, FaHeart } from "react-icons/fa";
 import { SiExpress, SiPostgresql, SiCplusplus } from "react-icons/si";
-import logo from "../logo.svg";
 import "../index.css"; // Asegura que tailwind y fuentes personalizadas estén aplicadas
 
 export default function LandingPage() {
@@ -25,7 +24,15 @@ export default function LandingPage() {
   const menuRefs = useRef([]);
 
   // Refs para las secciones
-  const sectionRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
+  const sectionRefs = useMemo(
+  () => [
+    useRef(null),
+    useRef(null),
+    useRef(null),
+    useRef(null),
+  ],
+  []
+);
 
   // Intersection Observer para detectar la sección visible
   useEffect(() => {
@@ -41,7 +48,7 @@ export default function LandingPage() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [sectionRefs]);
 
   // Actualiza la posición del subrayado
   useEffect(() => {
@@ -91,43 +98,7 @@ export default function LandingPage() {
     { icon: <FaLock className="text-pink-400" />, name: "APIs REST" },
   ];
 
-  // Testimonios de ejemplo
-  const testimonials = [
-    {
-      name: "Juan Pérez",
-      text: "Steven es un desarrollador muy dedicado y creativo. Su trabajo siempre supera las expectativas.",
-      role: "Compañero de universidad"
-    },
-    {
-      name: "María López",
-      text: "Excelente profesional, responsable y con gran capacidad para resolver problemas complejos.",
-      role: "Cliente freelance"
-    },
-    {
-      name: "Carlos Torres",
-      text: "Su pasión por la tecnología y el diseño se nota en cada proyecto que realiza.",
-      role: "Profesor"
-    }
-  ];
 
-  // Experiencia de ejemplo
-  const experience = [
-    {
-      year: "2023 - Actualidad",
-      title: "Estudiante de Ingeniería de Software",
-      place: "Universidad XYZ"
-    },
-    {
-      year: "2022 - 2023",
-      title: "Desarrollador Web Freelance",
-      place: "Proyectos personales y para clientes"
-    },
-    {
-      year: "2021 - 2022",
-      title: "Participante en hackathons y competencias",
-      place: "Diversos eventos online"
-    }
-  ];
 
   // Imágenes de programación (ahora solo las locales)
   const programmingImages = [
