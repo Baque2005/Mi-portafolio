@@ -7,7 +7,7 @@ import { SiExpress, SiPostgresql, SiCplusplus } from "react-icons/si";
 import "../index.css"; // Asegura que tailwind y fuentes personalizadas estén aplicadas
 
 export default function LandingPage() {
-  const [darkMode] = useState(true); // Elimino el toggle, fijo en dark
+  const [darkMode] = useState(true); // Fijo en dark
   const topRef = useRef(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
@@ -23,16 +23,17 @@ export default function LandingPage() {
   const [underlineStyle, setUnderlineStyle] = useState({ left: 0, width: 0 });
   const menuRefs = useRef([]);
 
-  // Refs para las secciones
+// Declaramos los refs en el nivel superior (CORRECTO)
+  const heroRef = useRef(null);
+  const galleryRef = useRef(null);
+  const techRef = useRef(null);
+  const aboutRef = useRef(null);
+
+  // Los agrupamos en un arreglo estable
   const sectionRefs = useMemo(
-  () => [
-    useRef(null),
-    useRef(null),
-    useRef(null),
-    useRef(null),
-  ],
-  []
-);
+    () => [heroRef, galleryRef, techRef, aboutRef],
+    []
+  );
 
   // Intersection Observer para detectar la sección visible
   useEffect(() => {
@@ -78,7 +79,7 @@ export default function LandingPage() {
   const facebook = "https://www.facebook.com/profile.php?id=61576900643053";
   const facebookPersonal = "https://www.facebook.com/stevenbaque.sj.7?locale=es_LA";
   const whatsapp = "https://wa.me/593986347561";
-  const cv = process.env.PUBLIC_URL + "/services/Cv.Ronald Steven.pdf";
+  const cv = "/services/Cv.Ronald Steven.pdf";
 
   // Tecnologías
   const techs = [
@@ -98,15 +99,12 @@ export default function LandingPage() {
     { icon: <FaLock className="text-pink-400" />, name: "APIs REST" },
   ];
 
-
-
-  // Imágenes de programación (ahora solo las locales)
+  // Imágenes de programación (rutas absolutas para Vite/CRA)
   const programmingImages = [
-    process.env.PUBLIC_URL + "/captura1.png",
-    process.env.PUBLIC_URL + "/captura2.png"
+    "/captura1.png",
+    "/captura2.png"
   ];
 
-  // Cambia la fuente global usando Tailwind (asegúrate de tener Inter, Montserrat, Roboto o Poppins en tu proyecto, aquí uso 'font-sans' de Tailwind por defecto)
   return (
     <main ref={topRef} className="min-h-screen relative bg-gradient-to-br from-[#181c24] via-[#23283a] to-[#1a1d23] text-white transition-colors duration-500 font-sans overflow-x-hidden">
       {/* Fondo de partículas */}
@@ -121,7 +119,7 @@ export default function LandingPage() {
             modes: { push: { quantity: 4 }, repulse: { distance: 100, duration: 0.4 } }
           },
           particles: {
-            color: { value: ["#6ee7b7", "#818cf8", "#a5b4fc"] }, // tonos suaves
+            color: { value: ["#6ee7b7", "#818cf8", "#a5b4fc"] },
             links: { enable: true, color: "#64748b", distance: 120, opacity: 0.15, width: 1 },
             collisions: { enable: true },
             move: { direction: "none", enable: true, outModes: { default: "bounce" }, random: false, speed: 1, straight: false },
@@ -134,6 +132,7 @@ export default function LandingPage() {
         }}
         className="absolute inset-0 z-0"
       />
+      
       {/* Overlay de fondo profesional */}
       <div className="pointer-events-none absolute inset-0 z-0" style={{background: 'url("https://www.transparenttextures.com/patterns/cubes.png") repeat', opacity: 0.08}} />
 
@@ -151,12 +150,11 @@ export default function LandingPage() {
       {/* Header mejorado y responsivo */}
       <header className="w-full shadow-lg border-b-2 border-cyan-700 bg-gradient-to-r from-[#23283a] via-[#23283a]/90 to-[#23283a] sticky top-0 z-20">
         <div className="container mx-auto flex flex-col md:flex-row items-center justify-between py-4 px-4 md:px-8 gap-2 md:gap-0">
-          {/* Logo y nombre */}
           <div className="flex items-center gap-3 w-full md:w-auto justify-center md:justify-start">
             <img src="/favicon.ico" alt="Logo" className="h-10 w-10 rounded-full shadow-md border-2 border-cyan-400 bg-white p-1" />
             <span className="text-2xl md:text-3xl font-extrabold tracking-tight text-gray-100">Steven Baque</span>
           </div>
-          {/* Menú con subrayado animado */}
+          
           <nav className="w-full md:w-auto mt-2 md:mt-0 flex flex-col md:flex-row items-center md:justify-end relative">
             <ul className="flex flex-wrap gap-4 md:gap-8 text-base md:text-lg relative">
               {menuItems.map((item, i) => (
@@ -178,7 +176,6 @@ export default function LandingPage() {
                   </a>
                 </li>
               ))}
-              {/* Subrayado animado */}
               <span
                 className="absolute bottom-0 h-1 bg-[#6ee7b7] rounded-full transition-all duration-300"
                 style={{
@@ -192,10 +189,10 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* Hero Section con imagen de fondo sutil y tu foto */}
+      {/* Hero Section */}
       <section ref={sectionRefs[0]} className="flex-grow container mx-auto px-4 sm:px-6 flex flex-col md:flex-row justify-center items-center text-center md:text-left space-y-6 md:space-y-0 md:space-x-12 relative z-10 pt-10 pb-20">
         <motion.img
-          src={process.env.PUBLIC_URL + "/Foto.png"}
+          src="/Foto.png"
           alt="Steven Baque"
           className="w-44 h-44 rounded-full object-cover border-4 border-[#6ee7b7] shadow-xl mb-4 md:mb-0 hover:scale-105 transition-transform duration-300"
           initial={{ scale: 0.8, opacity: 0 }}
@@ -252,7 +249,7 @@ export default function LandingPage() {
         `}</style>
       </section>
 
-      {/* Cinta de tecnologías/lenguajes (marquee infinita) */}
+      {/* Cinta de tecnologías */}
       <section ref={sectionRefs[2]} className="w-full py-8 bg-[#181c24] border-y border-cyan-900 overflow-hidden relative">
         <div className="absolute left-0 top-0 w-full h-full pointer-events-none bg-gradient-to-r from-[#181c24] via-transparent to-[#181c24] z-10" />
         <div className="flex items-center gap-12 animate-marquee whitespace-nowrap text-4xl font-bold px-8" style={{ width: 'max-content' }}>
@@ -317,7 +314,6 @@ export default function LandingPage() {
       >
         <h3 className="text-4xl font-bold mb-12 text-center text-cyan-400 drop-shadow-lg">Proyectos destacados</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Proyecto 1 */}
           <motion.div
             className="bg-[#23283a] rounded-lg shadow-lg p-6 text-white hover:scale-105 transform transition cursor-pointer border-b-4 border-cyan-400"
             whileHover={{ scale: 1.07, boxShadow: "0 8px 32px 0 rgba(99,102,241,0.2)" }}
@@ -330,7 +326,7 @@ export default function LandingPage() {
             <h4 className="text-2xl font-semibold mb-2">Sistema de Gestión de Tareas</h4>
             <p>App full-stack para administrar tareas y roles, con autenticación y panel administrativo.</p>
           </motion.div>
-          {/* Proyecto 2 */}
+
           <motion.div
             className="bg-[#23283a] rounded-lg shadow-lg p-6 text-white hover:scale-105 transform transition cursor-pointer border-b-4 border-pink-400"
             whileHover={{ scale: 1.07, boxShadow: "0 8px 32px 0 rgba(236,72,153,0.2)" }}
@@ -343,7 +339,7 @@ export default function LandingPage() {
             <h4 className="text-2xl font-semibold mb-2">Página Romántica Interactiva</h4>
             <p>Sitio web personalizado con animaciones y mensajes para dedicar a personas especiales.</p>
           </motion.div>
-          {/* Proyecto 3 */}
+
           <motion.div
             className="bg-[#23283a] rounded-lg shadow-lg p-6 text-white hover:scale-105 transform transition cursor-pointer border-b-4 border-violet-400"
             whileHover={{ scale: 1.07, boxShadow: "0 8px 32px 0 rgba(139,92,246,0.2)" }}
@@ -356,33 +352,23 @@ export default function LandingPage() {
             <h4 className="text-2xl font-semibold mb-2">Dashboard Administrativo</h4>
             <p>Dashboard moderno con React y Material UI para gestión de usuarios y estadísticas en tiempo real.</p>
           </motion.div>
-          {/* Proyecto 4: codigossyste.onrender.com */}
-<motion.div
-  className="bg-[#23283a] rounded-lg shadow-lg p-6 text-white hover:scale-105 transform transition cursor-pointer border-b-4 border-blue-400"
-  whileHover={{ scale: 1.07, boxShadow: "0 8px 32px 0 rgba(59,130,246,0.2)" }}
-  initial={{ opacity: 0, y: 40 }}
-  whileInView={{ opacity: 1, y: 0 }}
-  viewport={{ once: true, amount: 0.3 }}
-  transition={{ delay: 0.3, duration: 0.6 }}
->
-  <FaCloud className="text-4xl text-blue-400 mb-2 animate-bounce" />
-  <h4 className="text-2xl font-semibold mb-2">SysteCode</h4>
-  <p className="mb-2">
-    Plataforma online donde los usuarios pueden subir y descargar archivos HTML dedicables con fines sentimentales o creativos.
-  </p>
-  <p className="text-sm text-cyan-300 font-medium mt-2">
-    🛠 Tecnologías: React · Node.js · Express · PostgreSQL · JWT · GitHub · Google Auth
-  </p>
-  <a
-    href="https://codigossyste.onrender.com"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="mt-4 inline-block text-blue-400 hover:underline"
-  >
-    Ir al sitio →
-  </a>
-</motion.div>
 
+          <motion.div
+            className="bg-[#23283a] rounded-lg shadow-lg p-6 text-white hover:scale-105 transform transition cursor-pointer border-b-4 border-blue-400"
+            whileHover={{ scale: 1.07, boxShadow: "0 8px 32px 0 rgba(59,130,246,0.2)" }}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ delay: 0.3, duration: 0.6 }}
+          >
+            <FaCloud className="text-4xl text-blue-400 mb-2 animate-bounce" />
+            <h4 className="text-2xl font-semibold mb-2">SysteCode</h4>
+            <p className="mb-2">Plataforma online donde los usuarios pueden subir y descargar archivos HTML dedicables con fines sentimentales o creativos.</p>
+            <p className="text-sm text-cyan-300 font-medium mt-2">🛠 Tecnologías: React · Node.js · Express · PostgreSQL · JWT · GitHub · Google Auth</p>
+            <a href="https://codigossyste.onrender.com" target="_blank" rel="noopener noreferrer" className="mt-4 inline-block text-blue-400 hover:underline">
+              Ir al sitio →
+            </a>
+          </motion.div>
         </div>
       </motion.section>
 
@@ -422,7 +408,7 @@ export default function LandingPage() {
         </div>
       </motion.section>
 
-      {/* Contact Section con correo visible y visual */}
+      {/* Contact Section */}
       <motion.section
         id="contact"
         className="container mx-auto px-6 py-20 max-w-2xl text-center relative z-10"
